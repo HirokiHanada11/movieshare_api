@@ -27,3 +27,6 @@ certbot/
 nginx/
 
 docker-compose-production.yaml
+
+# Firebase SDK credentials
+firebase-sdk

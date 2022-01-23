@@ -15,4 +15,9 @@ type (
 	MoviePutRequestBody struct {
 		GrinningScore *uint32 `json:"grinningScore"`
 	}
+	
+	// LoginPostRequestBody is the structure of request body for creating a session token.
+	LoginPostRequestBody struct {
+		IdToken string `json:"idToken"`
+	} 
 )

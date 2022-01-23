@@ -138,8 +138,8 @@ definitions:
   loginPostRequestBody:
     type: "object"
     properties:
-      id:
-        type: string
+      tokenId:
+        type: "string"
   authResponse:
     type: "object"
     properties:

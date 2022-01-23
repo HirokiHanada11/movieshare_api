@@ -14,6 +14,7 @@ services:
       - "DB_PORT=${DB_PORT}"
       - "DB_USER=${DB_USER}"
       - "DB_PASSWORD=${DB_PASSWORD}"
+      - "GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}"
     volumes:
       - ./movieshare_api:/go/src
     command: go run cmd/main.go
