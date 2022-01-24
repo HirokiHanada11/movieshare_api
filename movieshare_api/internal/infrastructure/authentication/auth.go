@@ -25,7 +25,7 @@ type (
 )
 
 // NewAuthClient creates a new auth client
-func NewAuthClient(context *gin.Context) (AuthActions, error) {
+func NewAuthClient(context *gin.Context) (AuthClient, error) {
 	app := getFirebaseConnection()
 	client, err := app.Auth(context)
 	if err != nil {
