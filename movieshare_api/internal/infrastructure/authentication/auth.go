@@ -18,7 +18,7 @@ type (
 
 	// AuthRepository defines session management methods available
 	AuthActions interface {
-		CreateSessionCookie(*gin.Context)(error)
+		CreateSessionCookie(*gin.Context)(*auth.UserInfo, error)
 		DestroySessionCookie(*gin.Context)(error)
 		VerifySessionCookie(*gin.Context)(*auth.UserInfo, error)
 	}
@@ -37,12 +37,12 @@ func NewAuthClient(context *gin.Context) (AuthActions, error) {
 }
 
 // CreateSessionCookie creates and set session cookie from idToken
-func (authClient AuthClient) CreateSessionCookie(context *gin.Context) error {
+func (authClient AuthClient) CreateSessionCookie(context *gin.Context) (*auth.UserInfo, error) {
 	requestBody := contract.LoginPostRequestBody{}
 
 	err := context.ShouldBindJSON(&requestBody)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	
 	// cookie expires in 30 minutes
@@ -51,7 +51,7 @@ func (authClient AuthClient) CreateSessionCookie(context *gin.Context) error {
 	// generate session cookie from IdToken 
 	cookie, err := authClient.Client.SessionCookie(context, requestBody.IdToken, expiresIn)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// get the domain of the client
@@ -74,7 +74,7 @@ func (authClient AuthClient) CreateSessionCookie(context *gin.Context) error {
 		true,
 	)
 
-	return nil
+	return authClient.VerifyAndFetchUser(context, cookie)
 }
 
 // DestroySessionCookie destroys session cookie
@@ -117,6 +117,11 @@ func (authClient AuthClient) VerifySessionCookie(context *gin.Context) (*auth.Us
 		return nil, errors.New("not logged in, session cookie is unavailable")
 	}
 
+	return authClient.VerifyAndFetchUser(context, cookie) 
+}
+
+// verifies cookie and returns user information
+func (authClient AuthClient) VerifyAndFetchUser(context *gin.Context, cookie string) (*auth.UserInfo, error) {
 	// verify and check if the session cookie is revoked
 	decoded, err := authClient.Client.VerifySessionCookieAndCheckRevoked(context, cookie)
 	if err != nil {
@@ -128,5 +133,5 @@ func (authClient AuthClient) VerifySessionCookie(context *gin.Context) (*auth.Us
 	if err != nil {
 		return nil, errors.New("failed to retrieve user information")
 	}
-	return user.UserInfo, nil 
+	return user.UserInfo, nil
 }

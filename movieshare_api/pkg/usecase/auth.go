@@ -6,17 +6,17 @@ import (
 	"github.com/rikuhatano09/movieshare_api/internal/infrastructure/authentication"
 )
 
-func CreateSessionCookie(context *gin.Context) error {
+func CreateSessionCookie(context *gin.Context) (*auth.UserInfo, error) {
 	authClient, err := authentication.NewAuthClient(context)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	err = authClient.CreateSessionCookie(context)
+	userInfo, err := authClient.CreateSessionCookie(context)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return userInfo, nil
 }
 
 func DestroySessionCookie(context *gin.Context) error {
