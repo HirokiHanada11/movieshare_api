@@ -11,7 +11,7 @@ import (
 
 // LoginHandler handles login requests
 func LoginHandler(context *gin.Context) {
-	err := usecase.CreateSessionCookie(context)
+	userInfo, err := usecase.CreateSessionCookie(context)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": fmt.Sprintf("Bad request error: %s", err.Error()),
@@ -20,6 +20,7 @@ func LoginHandler(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, contract.VerificationResponse{
 		Status: "Succefully logged in the user.",
+		User: *userInfo,
 	})
 }
 
