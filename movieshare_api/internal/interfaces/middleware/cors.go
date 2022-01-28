@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CorsConfig() gin.HandlerFunc {
+func CORS() gin.HandlerFunc {
 	return cors.New(cors.Config{
 		AllowOrigins: []string{
 			"http://localhost:3000",
@@ -25,6 +25,7 @@ func CorsConfig() gin.HandlerFunc {
 			"Content-Length",
 			"Accept-Encoding",
 			"Authorization",
+			"X-CSRF-Token",
 		},
 		AllowCredentials: true,
 		MaxAge: 24 * time.Hour,
