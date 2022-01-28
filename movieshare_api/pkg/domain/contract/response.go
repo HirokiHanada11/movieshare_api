@@ -7,4 +7,8 @@ type (
 		Status string `json:"status"`
 		User auth.UserInfo `json:"user,omitempty"`
 	}
+
+	CsrfResponse struct {
+		CsrfToken string `json:"csrfToken"`
+	}
 )

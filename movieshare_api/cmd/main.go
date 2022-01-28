@@ -13,7 +13,7 @@ func main() {
 	engine := gin.Default()
 
 	// Set CORS config.
-	engine.Use(middleware.CorsConfig())
+	engine.Use(middleware.CORS())
 
 	engine.GET("/", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
@@ -24,18 +24,25 @@ func main() {
 	engine.GET("/movies/random", handler.GetMovieAtRandom)
 	engine.GET("/movies", handler.GetMovieList)
 	engine.GET("/movies/:id", handler.GetMovieByID)
-	engine.PUT("/movies/:id", handler.PutMovie)
 	
-	// Private Movie endpoints
-	authorized := engine.Group("/")
-	authorized.Use(middleware.Authenticate())
+	csrfProtected := engine.Group("/")
+	csrfProtected.Use(middleware.CSRF())
 	{
-		authorized.POST("/movies", handler.CreateMovie)
-	}
+		csrfProtected.GET("/auth", handler.CSRF)
 
-	engine.POST("/auth/login", handler.LoginHandler)
-	engine.POST("/auth/logout", handler.LogoutHandler)
-	engine.POST("/auth/verify", handler.VerificationHandler)
+		csrfProtected.POST("/auth/login", handler.LoginHandler)
+		csrfProtected.POST("/auth/logout", handler.LogoutHandler)
+		csrfProtected.POST("/auth/verify", handler.VerificationHandler)
+
+		csrfProtected.PUT("/movies/:id", handler.PutMovie)
+
+		// Private Movie endpoints
+		authorized := csrfProtected.Group("/")
+		authorized.Use(middleware.Authenticate())
+		{
+			authorized.POST("/movies", handler.CreateMovie)
+		}
+	}
 
 	engine.Run(":8000")
 }
