@@ -15,6 +15,7 @@ services:
       - "DB_USER=${DB_USER}"
       - "DB_PASSWORD=${DB_PASSWORD}"
       - "GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}"
+      - "CSRF_TOKEN_BASEKEY=${CSRF_TOKEN_BASEKEY}"
     volumes:
       - ./movieshare_api:/go/src
     command: go run cmd/main.go

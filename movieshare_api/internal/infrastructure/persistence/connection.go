@@ -55,7 +55,7 @@ func getDBConfig() (string, string) {
 	DBUser := os.Getenv("DB_USER")
 	DBPass := os.Getenv("DB_PASSWORD")
 	DBName := os.Getenv("DB_NAME")
-	DBSSLMode := getSSLMode()
+	DBSSLMode := "sslmode=disable"
 
 	if len(DBHost) == 0 || len(DBPort) == 0 || len(DBUser) == 0 || len(DBName) == 0 {
 		panic("database config is not specified")

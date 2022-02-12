@@ -12,8 +12,8 @@ func CSRF() gin.HandlerFunc {
 	return adapter.Wrap(
 		csrf.Protect(
 			[]byte(os.Getenv("CSRF_TOKEN_BASEKEY")),
-			// csrf.Secure(os.Getenv("GO_ENV") == "prod"),
-			// csrf.TrustedOrigins([]string{"http://localhost:3000"}),
+			csrf.SameSite(csrf.SameSiteNoneMode),
+			csrf.TrustedOrigins([]string{"http://localhost:3000", "https://mshare-web-app.vercel.app"}),
 			// csrf.Path("/auth"),
 			),
 		)

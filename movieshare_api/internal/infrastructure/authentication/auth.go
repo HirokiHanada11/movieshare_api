@@ -30,7 +30,7 @@ func NewAuthClient(context *gin.Context) (AuthClient, error) {
 	app := getFirebaseConnection()
 	client, err := app.Auth(context)
 	if err != nil {
-		return AuthClient{}, errors.New("failed to create initiate client")
+		return AuthClient{}, err
 	}
 	return AuthClient{
 		Client: client,
