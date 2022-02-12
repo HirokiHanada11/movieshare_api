@@ -24,12 +24,12 @@ func main() {
 	engine.GET("/movies/random", handler.GetMovieAtRandom)
 	engine.GET("/movies", handler.GetMovieList)
 	engine.GET("/movies/:id", handler.GetMovieByID)
-	
+
 	csrfProtected := engine.Group("/")
 	csrfProtected.Use(middleware.CSRF())
 	{
 		csrfProtected.GET("/auth", handler.CSRF)
-
+		
 		csrfProtected.POST("/auth/login", handler.LoginHandler)
 		csrfProtected.POST("/auth/logout", handler.LogoutHandler)
 		csrfProtected.POST("/auth/verify", handler.VerificationHandler)
