@@ -11,6 +11,8 @@ import (
 func CSRF(context *gin.Context) {
 	// generate csrf token to be used for subsequent POST requests
 	// should be called at the very first load of the website
+	csrf.SameSite(csrf.SameSiteNoneMode)
+	csrf.Secure(true)
 	context.JSON(http.StatusOK, contract.CsrfResponse{
 		CsrfToken: csrf.Token(context.Request),
 	})

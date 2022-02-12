@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"errors"
+	"net/http"
 	"os"
 	"time"
 
@@ -61,9 +62,10 @@ func (authClient AuthClient) CreateSessionCookie(context *gin.Context) (*auth.Us
 	case "local":
 		domain = "localhost"
 	case "prod":
-		domain = ""
+		domain = "mshare-api.com"
 	}
 
+	context.SetSameSite(http.SameSiteNoneMode)
 	context.SetCookie(
 		"session",
 		cookie,
@@ -97,6 +99,7 @@ func (authClient AuthClient) DestroySessionCookie(context *gin.Context) error {
 	}
 	
 	// clear session cookie
+	context.SetSameSite(http.SameSiteNoneMode)
 	context.SetCookie(
 		"session",
 		"",
