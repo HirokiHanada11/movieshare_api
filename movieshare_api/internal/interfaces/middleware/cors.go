@@ -11,6 +11,7 @@ func CORS() gin.HandlerFunc {
 	return cors.New(cors.Config{
 		AllowOrigins: []string{
 			"http://localhost:3000",
+			"https://mshare-web-app.vercel.app"
 		},
 		AllowMethods: []string{
 			"GET",
